@@ -6,16 +6,26 @@ class Fraction {
 private:
     int num;
     int den;
-    
+
     int gcd(int a, int b);
-    void reduce();     
+    void reduce();
     int inputInt();
 
 public:
+    // constructors
+    Fraction();
+    Fraction(int n, int d);
+
+    // destructor
+    ~Fraction();
+
     void input();
-    void print();
-    Fraction add(Fraction other);
-    Fraction sub(Fraction other);
-    Fraction mul(Fraction other);
-    Fraction div(Fraction other);
+    void print() const;
+   
+    Fraction add(const Fraction& other) const;
+    Fraction sub(const Fraction& other) const;
+    Fraction mul(const Fraction& other) const;
+    Fraction div(const Fraction& other) const;
+
+    void inverse();
 };

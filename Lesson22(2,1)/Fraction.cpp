@@ -1,17 +1,35 @@
 #include "Fraction.h"
 #include <iostream>
+#include <cmath>
 using namespace std;
 
+// ---------------- constructors ----------------
 
-// НСД
+Fraction::Fraction() : num(0), den(1) {}
+
+Fraction::Fraction(int n, int d) : num(n), den(d) {
+    if (den == 0) {
+        cout << "Error: denominator = 0! Set to 1\n";
+        den = 1;
+    }
+    reduce();
+}
+
+// ---------------- destructor ----------------
+
+Fraction::~Fraction() {
+    // no dynamic memory
+}
+
+// ---------------- gcd + reduce ----------------
+
 int Fraction::gcd(int a, int b) {
-    if (b == 0) return a;
+    if (b == 0) return abs(a);
     return gcd(b, a % b);
 }
 
-// Скорочення
 void Fraction::reduce() {
-    int g = gcd(abs(num), abs(den));
+    int g = gcd(num, den);
     num /= g;
     den /= g;
 
@@ -21,7 +39,8 @@ void Fraction::reduce() {
     }
 }
 
-// Валидатор int
+// ---------------- input validator ----------------
+
 int Fraction::inputInt() {
     int x;
     while (true) {
@@ -33,14 +52,17 @@ int Fraction::inputInt() {
             cout << "Error: only integer!\n";
             continue;
         }
-        return x;
 
         if (x < -1000 || x > 1000) {
-            cout << "Wrong range!";
+            cout << "Wrong range!\n";
             continue;
         }
+
+        return x;
     }
 }
+
+// ---------------- input / print ----------------
 
 void Fraction::input() {
     cout << "Enter numerator: ";
@@ -60,53 +82,57 @@ void Fraction::input() {
     reduce();
 }
 
-void Fraction::print() {
+void Fraction::print() const {
     cout << num << " / " << den;
 }
 
-Fraction Fraction::add(Fraction other) {
-    Fraction r;
+// ---------------- operations ----------------
 
-    r.num = num * other.den + other.num * den;
-    r.den = den * other.den;
-
-    r.reduce();
-    return r;
+Fraction Fraction::add(const Fraction& other) const {
+    return Fraction(
+        num * other.den + other.num * den,
+        den * other.den
+    );
 }
 
-Fraction Fraction::sub(Fraction other) {
-    Fraction r;
-
-    r.num = num * other.den - other.num * den;
-    r.den = den * other.den;
-
-    r.reduce();
-    return r;
+Fraction Fraction::sub(const Fraction& other) const {
+    return Fraction(
+        num * other.den - other.num * den,
+        den * other.den
+    );
 }
 
-Fraction Fraction::mul(Fraction other) {
-    Fraction r;
-
-    r.num = num * other.num;
-    r.den = den * other.den;
-
-    r.reduce();
-    return r;
+Fraction Fraction::mul(const Fraction& other) const {
+    return Fraction(
+        num * other.num,
+        den * other.den
+    );
 }
 
-Fraction Fraction::div(Fraction other) {
-    Fraction r;
-
+Fraction Fraction::div(const Fraction& other) const {
     if (other.num == 0) {
         cout << "Error: division by zero fraction!\n";
-        r.num = 0;
-        r.den = 1;
-        return r;
+        return Fraction(0, 1);
     }
 
-    r.num = num * other.den;
-    r.den = den * other.num;
+    return Fraction(
+        num * other.den,
+        den * other.num
+    );
+}
 
-    r.reduce();
-    return r;
+// ---------------- inverse ----------------
+
+void Fraction::inverse() {
+    if (num == 0) {
+        cout << "Error: cannot invert zero!\n";
+        return;
+    }
+
+    swap(num, den);
+
+    if (den < 0) {
+        num = -num;
+        den = -den;
+    }
 }
