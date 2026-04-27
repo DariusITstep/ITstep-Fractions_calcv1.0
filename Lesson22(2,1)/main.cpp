@@ -1,38 +1,38 @@
-#include "Fraction.h"
 #include <iostream>
+#include "Fraction.h"
+#include "Input.h"
+#include "Menu.h"
+
 using namespace std;
-
-Fraction f1, f2;
-
-void reInputer();
-int inputChoice();
-void showCur();
 
 int main() {
 
-    reInputer();
+    Fraction f1 = Input::readFraction();
+    Fraction f2 = Input::readFraction();
 
     Fraction result;
-    int choice;
 
     while (true) {
 
-        cout << "\nSelect operation:\n"
-            << "1. add fractions\n"
-            << "2. sub fractions\n"
-            << "3. mul fractions\n"
-            << "4. div fractions\n"
-            << "5. inverse first fraction\n"
-            << "6. inverse second fraction\n"
-            << "7. reinput fractions\n"
+        cout << "\n--- FRACTIONS ---\n";
+        cout << "F1: "; f1.print();
+        cout << "\nF2: "; f2.print();
+
+        cout << "\n\nSelect operation:\n"
+            << "1. add\n"
+            << "2. sub\n"
+            << "3. mul\n"
+            << "4. div\n"
+            << "5. inverse f1\n"
+            << "6. inverse f2\n"
+            << "7. reinput\n"
             << "0. exit\n"
             << "Choice: ";
 
-        choice = inputChoice();
+        int c = Menu::getChoice();
 
-        switch (choice) {
+        switch (c) {
         case 0:
-            cout << "Exit program...";
             return 0;
 
         case 1:
@@ -53,14 +53,15 @@ int main() {
 
         case 5:
             f1.inverse();
-            break;
+            continue;
 
         case 6:
             f2.inverse();
-            break;
+            continue;
 
         case 7:
-            reInputer();
+            f1 = Input::readFraction();
+            f2 = Input::readFraction();
             continue;
 
         default:
@@ -68,58 +69,8 @@ int main() {
             continue;
         }
 
-        if (choice == 5 || choice == 6) {
-            showCur();
-        }
-        else {
-            cout << "Result: ";
-            result.print();
-            cout << endl;
-        }
-        
-    }
-
-    return 0;
-}
-
-// ---------------- shower ----------------
-void showCur() {
-
-    cout << "Current fractions: ";
-    f1.print();
-    cout << " and ";
-    f2.print();
-    cout << endl;
-}
-
-// ---------------- reinput ----------------
-
-void reInputer() {
-    cout << "First fraction:\n";
-    f1.input();
-
-    cout << "Second fraction:\n";
-    f2.input();
-
-    showCur();
-}
-
-// ---------------- safe menu input ----------------
-
-int inputChoice() {
-    int x;
-
-    while (true) {
-        cin >> x;
-
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
-            cout << "Error: only integer!\n";
-            continue;
-        }
-
-        return x;
+        cout << "Result: ";
+        result.print();
+        cout << endl;
     }
 }
-
