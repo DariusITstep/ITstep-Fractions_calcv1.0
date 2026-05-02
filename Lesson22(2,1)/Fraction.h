@@ -15,10 +15,10 @@ public:
 
     void print() const;
 
-    Fraction add(const Fraction& other) const;
-    Fraction sub(const Fraction& other) const;
-    Fraction mul(const Fraction& other) const;
-    Fraction div(const Fraction& other) const;
+    Fraction operator+(const Fraction& other) const;
+    Fraction operator-(const Fraction& other) const;
+    Fraction operator*(const Fraction& other) const;
+    Fraction operator/(const Fraction& other) const;
 
     void inverse();
 };

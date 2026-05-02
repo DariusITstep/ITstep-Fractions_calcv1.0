@@ -2,19 +2,22 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
-
-// ---------------- constructors ----------------
-
+// --------------------
+// constructors
+// --------------------
 Fraction::Fraction() : num(0), den(1) {}
 
 Fraction::Fraction(int n, int d) : num(n), den(d) {
-    if (den == 0) den = 1;
+    if (den == 0) {
+        std::cout << "Warning: denominator = 0, set to 1\n";
+        den = 1;
+    }
     reduce();
 }
 
-// ---------------- gcd + reduce ----------------
-
+// --------------------
+// gcd + reduce
+// --------------------
 int Fraction::gcd(int a, int b) {
     if (b == 0) return abs(a);
     return gcd(b, a % b);
@@ -31,37 +34,51 @@ void Fraction::reduce() {
     }
 }
 
-// ---------------- print ----------------
-
+// --------------------
+// output
+// --------------------
 void Fraction::print() const {
-    cout << num << " / " << den;
+    std::cout << "[" << num << " / " << den << "]\n";
 }
 
-// ---------------- operations ----------------
-
-Fraction Fraction::add(const Fraction& o) const {
-    return Fraction(num * o.den + o.num * den, den * o.den);
+// --------------------
+// operators
+// --------------------
+Fraction Fraction::operator+(const Fraction& other) const {
+    int newNum = num * other.den + other.num * den;
+    int newDen = den * other.den;
+    return Fraction(newNum, newDen);
 }
 
-Fraction Fraction::sub(const Fraction& o) const {
-    return Fraction(num * o.den - o.num * den, den * o.den);
+Fraction Fraction::operator-(const Fraction& other) const {
+    int newNum = num * other.den - other.num * den;
+    int newDen = den * other.den;
+    return Fraction(newNum, newDen);
 }
 
-Fraction Fraction::mul(const Fraction& o) const {
-    return Fraction(num * o.num, den * o.den);
+Fraction Fraction::operator*(const Fraction& other) const {
+    return Fraction(num * other.num, den * other.den);
 }
 
-Fraction Fraction::div(const Fraction& o) const {
-    if (o.num == 0) return Fraction(0, 1);
-    return Fraction(num * o.den, den * o.num);
+Fraction Fraction::operator/(const Fraction& other) const {
+    if (other.num == 0) {
+        std::cout << "Error: division by zero fraction\n";
+        return Fraction(0, 1);
+    }
+
+    return Fraction(num * other.den, den * other.num);
 }
 
-// ---------------- inverse ----------------
-
+// --------------------
+// inverse
+// --------------------
 void Fraction::inverse() {
-    if (num == 0) return;
+    if (num == 0) {
+        std::cout << "Error: cannot invert zero fraction\n";
+        return;
+    }
 
-    swap(num, den);
+    std::swap(num, den);
 
     if (den < 0) {
         num = -num;

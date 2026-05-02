@@ -1,54 +1,42 @@
-#include <iostream>
 #include "Fraction.h"
-#include "Input.h"
-#include "Menu.h"
+#include <iostream>
 
-using namespace std;
+int inputer();
 
 int main() {
 
-    Fraction f1 = Input::readFraction();
-    Fraction f2 = Input::readFraction();
-
-    Fraction result;
-
+    Fraction f1;
+    Fraction f2(4, 7);
+ 
     while (true) {
 
-        cout << "\n--- FRACTIONS ---\n";
-        cout << "F1: "; f1.print();
-        cout << "\nF2: "; f2.print();
+        std::cout << "\n--- FRACTIONS ---\n";
+        std::cout << "F1: "; f1.print();
+        std::cout << "F2: "; f2.print();
 
-        cout << "\n\nSelect operation:\n"
-            << "1. add\n"
-            << "2. sub\n"
-            << "3. mul\n"
-            << "4. div\n"
-            << "5. inverse f1\n"
-            << "6. inverse f2\n"
-            << "7. reinput\n"
-            << "0. exit\n"
-            << "Choice: ";
+        std::cout << "\n1. add\n2. sub\n3. mul\n4. div\n5. inverse f1\n6. inverse f2\n0. exit\nChoice: ";
 
-        int c = Menu::getChoice();
+        int choice = inputer();
+        Fraction res;
 
-        switch (c) {
+        switch (choice) {
         case 0:
             return 0;
 
         case 1:
-            result = f1.add(f2);
+            res = f1 + f2;
             break;
 
         case 2:
-            result = f1.sub(f2);
+            res = f1 - f2;
             break;
 
         case 3:
-            result = f1.mul(f2);
+            res = f1 * f2;
             break;
 
         case 4:
-            result = f1.div(f2);
+            res = f1 / f2;
             break;
 
         case 5:
@@ -59,18 +47,34 @@ int main() {
             f2.inverse();
             continue;
 
-        case 7:
-            f1 = Input::readFraction();
-            f2 = Input::readFraction();
-            continue;
-
         default:
-            cout << "Wrong input!\n";
+            std::cout << "Wrong input!\n";
             continue;
         }
 
-        cout << "Result: ";
-        result.print();
-        cout << endl;
+        std::cout << "Result: ";
+        res.print();
+    }
+
+    return 0;
+}
+
+// --------------------
+// safe input
+// --------------------
+int inputer() {
+    int x;
+
+    while (true) {
+        std::cin >> x;
+
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Error: only integer!\n";
+            continue;
+        }
+
+        return x;
     }
 }
