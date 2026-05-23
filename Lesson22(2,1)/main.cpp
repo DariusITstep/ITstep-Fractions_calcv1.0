@@ -1,80 +1,62 @@
 #include "Fraction.h"
-#include <iostream>
 
-int inputer();
+int main()
+{
+    Fraction f1(2, 3);
+    Fraction f2(5, 7);
 
-int main() {
+    cout << "Original fractions:" << endl;
 
-    Fraction f1;
-    Fraction f2(4, 7);
- 
-    while (true) {
+    f1.print();
+    f2.print();
 
-        std::cout << "\n--- FRACTIONS ---\n";
-        std::cout << "F1: "; f1.print();
-        std::cout << "F2: "; f2.print();
+    // SAVE
+    ofstream out("fractions.bin", ios::binary);
 
-        std::cout << "\n1. add\n2. sub\n3. mul\n4. div\n5. inverse f1\n6. inverse f2\n0. exit\nChoice: ";
-
-        int choice = inputer();
-        Fraction res;
-
-        switch (choice) {
-        case 0:
-            return 0;
-
-        case 1:
-            res = f1 + f2;
-            break;
-
-        case 2:
-            res = f1 - f2;
-            break;
-
-        case 3:
-            res = f1 * f2;
-            break;
-
-        case 4:
-            res = f1 / f2;
-            break;
-
-        case 5:
-            f1.inverse();
-            continue;
-
-        case 6:
-            f2.inverse();
-            continue;
-
-        default:
-            std::cout << "Wrong input!\n";
-            continue;
-        }
-
-        std::cout << "Result: ";
-        res.print();
+    if (!out)
+    {
+        cout << "File open error!" << endl;
+        return 1;
     }
+
+    f1.save(out);
+    f2.save(out);
+
+    out.close();
+
+    // OBJECT FOR LOAD
+    Fraction a;
+    Fraction b;
+
+    // LOAD
+    ifstream in("fractions.bin", ios::binary);
+
+    if (!in)
+    {
+        cout << "File open error!" << endl;
+        return 1;
+    }
+
+    a.load(in);
+    b.load(in);
+
+    in.close();
+
+    cout << endl;
+
+    cout << "Loaded fractions:" << endl;
+
+    a.print();
+    b.print();
+
+    cout << endl;
+
+    // OPTIONS
+    Fraction sum = a + b;
+
+    cout << "Sum:" << endl;
+
+    sum.print();
 
     return 0;
-}
-
-// --------------------
-// safe input
-// --------------------
-int inputer() {
-    int x;
-
-    while (true) {
-        std::cin >> x;
-
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            std::cout << "Error: only integer!\n";
-            continue;
-        }
-
-        return x;
-    }
 }
